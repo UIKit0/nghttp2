@@ -19,7 +19,7 @@ configure
 install-sh
 .deps/
 .libs
-#lib/includes/nghttp2/nghttp2ver.h
+lib/includes/nghttp2/nghttp2ver.h
 lib/libnghttp2.pc
 src/libnghttp2_asio.pc
 ltmain.sh
