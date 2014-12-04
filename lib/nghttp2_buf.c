@@ -238,9 +238,9 @@ void nghttp2_bufs_seek_last_present(nghttp2_bufs *bufs) {
   }
 }
 
-ssize_t nghttp2_bufs_len(nghttp2_bufs *bufs) {
+__int64 nghttp2_bufs_len(nghttp2_bufs *bufs) {
   nghttp2_buf_chain *ci;
-  ssize_t len;
+  __int64 len;
 
   len = 0;
   for (ci = bufs->head; ci; ci = ci->next) {
@@ -250,8 +250,8 @@ ssize_t nghttp2_bufs_len(nghttp2_bufs *bufs) {
   return len;
 }
 
-static ssize_t bufs_avail(nghttp2_bufs *bufs) {
-  return (ssize_t)(nghttp2_buf_avail(&bufs->cur->buf) +
+static __int64 bufs_avail(nghttp2_bufs *bufs) {
+  return (__int64)(nghttp2_buf_avail(&bufs->cur->buf) +
                    (bufs->chunk_length - bufs->offset) *
                        (bufs->max_chunk - bufs->chunk_used));
 }
@@ -295,7 +295,7 @@ int nghttp2_bufs_add(nghttp2_bufs *bufs, const void *data, size_t len) {
   nghttp2_buf *buf;
   const uint8_t *p;
 
-  if (bufs_avail(bufs) < (ssize_t)len) {
+  if (bufs_avail(bufs) < (__int64)len) {
     return NGHTTP2_ERR_BUFFER_ERROR;
   }
 
@@ -391,7 +391,7 @@ int nghttp2_bufs_orb_hold(nghttp2_bufs *bufs, uint8_t b) {
   return 0;
 }
 
-ssize_t nghttp2_bufs_remove(nghttp2_bufs *bufs, uint8_t **out) {
+__int64 nghttp2_bufs_remove(nghttp2_bufs *bufs, uint8_t **out) {
   size_t len;
   nghttp2_buf_chain *chain;
   nghttp2_buf *buf;
@@ -431,7 +431,7 @@ ssize_t nghttp2_bufs_remove(nghttp2_bufs *bufs, uint8_t **out) {
 
   *out = res;
 
-  return (ssize_t)len;
+  return (__int64)len;
 }
 
 void nghttp2_bufs_reset(nghttp2_bufs *bufs) {

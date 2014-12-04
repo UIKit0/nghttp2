@@ -529,7 +529,7 @@ int nghttp2_submit_data(nghttp2_session *session, uint8_t flags,
   return 0;
 }
 
-ssize_t nghttp2_pack_settings_payload(uint8_t *buf, size_t buflen,
+__int64 nghttp2_pack_settings_payload(uint8_t *buf, size_t buflen,
                                       const nghttp2_settings_entry *iv,
                                       size_t niv) {
   if (!nghttp2_iv_check(iv, niv)) {

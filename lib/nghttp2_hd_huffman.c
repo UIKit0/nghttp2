@@ -40,7 +40,7 @@ extern const nghttp2_huff_decode huff_decode_table[][16];
  * and points where next output should be placed. The number of
  * unfilled bits in the pointed location is returned.
  */
-static ssize_t huff_encode_sym(nghttp2_bufs *bufs, size_t *avail_ptr,
+static __int64 huff_encode_sym(nghttp2_bufs *bufs, size_t *avail_ptr,
                                size_t rembits, const nghttp2_huff_sym *sym) {
   int rv;
   size_t nbits = sym->nbits;
@@ -93,7 +93,7 @@ static ssize_t huff_encode_sym(nghttp2_bufs *bufs, size_t *avail_ptr,
       *avail_ptr = nghttp2_bufs_cur_avail(bufs);
     }
   }
-  return (ssize_t)rembits;
+  return (__int64)rembits;
 }
 
 size_t nghttp2_hd_huff_encode_count(const uint8_t *src, size_t len) {
@@ -110,7 +110,7 @@ size_t nghttp2_hd_huff_encode_count(const uint8_t *src, size_t len) {
 int nghttp2_hd_huff_encode(nghttp2_bufs *bufs, const uint8_t *src,
                            size_t srclen) {
   int rv;
-  ssize_t rembits = 8;
+  __int64 rembits = 8;
   size_t i;
   size_t avail;
 
@@ -157,7 +157,7 @@ void nghttp2_hd_huff_decode_context_init(nghttp2_hd_huff_decode_context *ctx) {
   ctx->accept = 1;
 }
 
-ssize_t nghttp2_hd_huff_decode(nghttp2_hd_huff_decode_context *ctx,
+__int64 nghttp2_hd_huff_decode(nghttp2_hd_huff_decode_context *ctx,
                                nghttp2_bufs *bufs, const uint8_t *src,
                                size_t srclen, int final) {
   size_t i, j;
@@ -197,5 +197,5 @@ ssize_t nghttp2_hd_huff_decode(nghttp2_hd_huff_decode_context *ctx,
   if (final && !ctx->accept) {
     return NGHTTP2_ERR_HEADER_COMP;
   }
-  return (ssize_t)i;
+  return (__int64)i;
 }

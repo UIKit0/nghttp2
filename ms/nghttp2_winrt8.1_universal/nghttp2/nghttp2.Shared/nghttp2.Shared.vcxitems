@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{eec15f5e-5b26-4438-b331-1336103479a5}</ItemsProjectGuid>
+    <ItemsRootNamespace>nghttp2</ItemsRootNamespace>
+    <ItemsProjectName>nghttp2.Shared</ItemsProjectName>
+    <CodeSharingProject>248F659F-DAC5-46E8-AC09-60EC9FC95053</CodeSharingProject>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\includes\nghttp2\nghttp2.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\includes\nghttp2\nghttp2ver.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_buf.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_callbacks.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_frame.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_hd.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_hd_huffman.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_helper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_int.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_map.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_net.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_npn.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_option.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_outbound_item.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_pq.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_priority_spec.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_queue.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_session.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_stream.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_submit.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\includes\nghttp2\nghttp2ver.h.in" />
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\libnghttp2.pc.in" />
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\Makefile.am" />
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\Makefile.msvc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_buf.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_callbacks.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_frame.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_hd.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_hd_huffman.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_hd_huffman_data.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_helper.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_map.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_npn.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_option.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_outbound_item.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_pq.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_priority_spec.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_queue.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_session.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_stream.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_submit.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_version.c" />
+  </ItemGroup>
+</Project>

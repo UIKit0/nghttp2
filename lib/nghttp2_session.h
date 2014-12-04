@@ -176,7 +176,7 @@ struct nghttp2_session {
   nghttp2_settings_entry *inflight_iv;
   /* The number of entries in |inflight_iv|. -1 if there is no
      in-flight SETTINGS. */
-  ssize_t inflight_niv;
+  __int64 inflight_niv;
   /* The number of outgoing streams. This will be capped by
      remote_settings.max_concurrent_streams. */
   size_t num_outgoing_streams;
@@ -441,7 +441,7 @@ void nghttp2_session_detach_closed_stream(nghttp2_session *session,
  * linked list now.
  */
 int nghttp2_session_can_add_closed_stream(nghttp2_session *session,
-                                          ssize_t offset);
+                                          __int64 offset);
 
 /*
  * Deletes closed stream to ensure that number of incoming streams
@@ -451,7 +451,7 @@ int nghttp2_session_can_add_closed_stream(nghttp2_session *session,
  * stream and the maximum number.
  */
 void nghttp2_session_adjust_closed_stream(nghttp2_session *session,
-                                          ssize_t offset);
+                                          __int64 offset);
 
 /*
  * If further receptions and transmissions over the stream |stream_id|

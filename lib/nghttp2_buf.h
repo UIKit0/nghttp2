@@ -50,13 +50,13 @@ typedef struct {
   uint8_t *mark;
 } nghttp2_buf;
 
-#define nghttp2_buf_len(BUF) ((ssize_t)((BUF)->last - (BUF)->pos))
-#define nghttp2_buf_avail(BUF) ((ssize_t)((BUF)->end - (BUF)->last))
-#define nghttp2_buf_mark_avail(BUF) ((ssize_t)((BUF)->mark - (BUF)->last))
-#define nghttp2_buf_cap(BUF) ((ssize_t)((BUF)->end - (BUF)->begin))
+#define nghttp2_buf_len(BUF) ((__int64)((BUF)->last - (BUF)->pos))
+#define nghttp2_buf_avail(BUF) ((__int64)((BUF)->end - (BUF)->last))
+#define nghttp2_buf_mark_avail(BUF) ((__int64)((BUF)->mark - (BUF)->last))
+#define nghttp2_buf_cap(BUF) ((__int64)((BUF)->end - (BUF)->begin))
 
-#define nghttp2_buf_pos_offset(BUF) ((ssize_t)((BUF)->pos - (BUF)->begin))
-#define nghttp2_buf_last_offset(BUF) ((ssize_t)((BUF)->last - (BUF)->begin))
+#define nghttp2_buf_pos_offset(BUF) ((__int64)((BUF)->pos - (BUF)->begin))
+#define nghttp2_buf_last_offset(BUF) ((__int64)((BUF)->last - (BUF)->begin))
 
 #define nghttp2_buf_shift_right(BUF, AMT)                                      \
   do {                                                                         \
@@ -318,7 +318,7 @@ int nghttp2_bufs_orb_hold(nghttp2_bufs *bufs, uint8_t b);
  * NGHTTP2_ERR_NOMEM
  *     Out of memory
  */
-ssize_t nghttp2_bufs_remove(nghttp2_bufs *bufs, uint8_t **out);
+__int64 nghttp2_bufs_remove(nghttp2_bufs *bufs, uint8_t **out);
 
 /*
  * Resets |bufs| and makes the buffers empty.
@@ -365,6 +365,6 @@ int nghttp2_bufs_next_present(nghttp2_bufs *bufs);
 /*
  * Returns the buffer length of |bufs|.
  */
-ssize_t nghttp2_bufs_len(nghttp2_bufs *bufs);
+__int64 nghttp2_bufs_len(nghttp2_bufs *bufs);
 
 #endif /* NGHTTP2_BUF_H */

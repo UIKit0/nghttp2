@@ -282,7 +282,7 @@ nghttp2_hd_entry *nghttp2_hd_table_get(nghttp2_hd_context *context,
                                        size_t index);
 
 /* For unittesting purpose */
-ssize_t nghttp2_hd_decode_length(uint32_t *res, size_t *shift_ptr, int *final,
+__int64 nghttp2_hd_decode_length(uint32_t *res, size_t *shift_ptr, int *final,
                                  uint32_t initial, size_t shift, uint8_t *in,
                                  uint8_t *last, size_t prefix);
 
@@ -337,7 +337,7 @@ void nghttp2_hd_huff_decode_context_init(nghttp2_hd_huff_decode_context *ctx);
  * NGHTTP2_ERR_HEADER_COMP
  *     Decoding process has failed.
  */
-ssize_t nghttp2_hd_huff_decode(nghttp2_hd_huff_decode_context *ctx,
+__int64 nghttp2_hd_huff_decode(nghttp2_hd_huff_decode_context *ctx,
                                nghttp2_bufs *bufs, const uint8_t *src,
                                size_t srclen, int final);
 

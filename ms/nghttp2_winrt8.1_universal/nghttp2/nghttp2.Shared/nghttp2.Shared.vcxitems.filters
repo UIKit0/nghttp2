@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)targetver.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\includes\nghttp2\nghttp2.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\includes\nghttp2\nghttp2ver.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_buf.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_callbacks.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_frame.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_hd.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_hd_huffman.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_helper.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_int.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_map.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_net.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_npn.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_option.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_outbound_item.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_pq.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_priority_spec.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_queue.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_session.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_stream.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_submit.h">
+      <Filter>Lib</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Includes">
+      <UniqueIdentifier>{9e516df8-5807-41c2-b604-30930092f7a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Lib">
+      <UniqueIdentifier>{98cb6eb6-6626-499e-b63a-d60f16efeba7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\includes\nghttp2\nghttp2ver.h.in">
+      <Filter>Includes</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\libnghttp2.pc.in">
+      <Filter>Lib</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\Makefile.am">
+      <Filter>Lib</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\Makefile.msvc">
+      <Filter>Lib</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_buf.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_callbacks.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_frame.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_hd.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_hd_huffman.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_hd_huffman_data.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_helper.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_map.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_npn.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_option.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_outbound_item.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_pq.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_priority_spec.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_queue.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_session.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_stream.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_submit.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_version.c">
+      <Filter>Lib</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
