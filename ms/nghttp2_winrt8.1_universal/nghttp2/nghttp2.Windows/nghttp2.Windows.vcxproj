@@ -132,6 +132,10 @@
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
       <GenerateWindowsMetadata>false</GenerateWindowsMetadata>
     </Link>
+    <PreBuildEvent>
+      <Command>PowerShell -File "$(ProjectDir)..\..\..\version_header_generator.ps1"</Command>
+      <Message>Generate the version header file</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

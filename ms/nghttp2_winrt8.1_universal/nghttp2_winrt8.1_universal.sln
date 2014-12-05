@@ -18,6 +18,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nghttp2.Windows", "nghttp2\nghttp2.Windows\nghttp2.Windows.vcxproj", "{0E46768C-6829-462B-B99F-971E43F90F82}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nghttp2.WindowsPhone", "nghttp2\nghttp2.WindowsPhone\nghttp2.WindowsPhone.vcxproj", "{8FDF3C97-99C8-4F2A-B27A-06F7EE1348CE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0E46768C-6829-462B-B99F-971E43F90F82} = {0E46768C-6829-462B-B99F-971E43F90F82}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
