@@ -62,6 +62,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_submit.h">
       <Filter>Lib</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\includes\nghttp2\windows\nghttp2_windows.h">
+      <Filter>Includes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Includes">

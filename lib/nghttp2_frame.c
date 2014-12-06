@@ -432,7 +432,7 @@ int nghttp2_frame_pack_settings(nghttp2_bufs *bufs, nghttp2_settings *frame) {
 
   buf = &bufs->head->buf;
 
-  if (nghttp2_buf_avail(buf) < (__int64)frame->hd.length) {
+  if (nghttp2_buf_avail(buf) < (ssize_t)frame->hd.length) {
     return NGHTTP2_ERR_FRAME_SIZE_ERROR;
   }
 
@@ -761,7 +761,7 @@ int nghttp2_frame_unpack_altsvc_payload(nghttp2_extension *frame,
   buf.last += var_gift_payloadlen;
 
   /* 1 for Host-Len */
-  if (nghttp2_buf_len(&buf) < 1 + (__int64)altsvc->protocol_id_len) {
+  if (nghttp2_buf_len(&buf) < 1 + (ssize_t)altsvc->protocol_id_len) {
     return NGHTTP2_ERR_FRAME_SIZE_ERROR;
   }
 
@@ -771,7 +771,7 @@ int nghttp2_frame_unpack_altsvc_payload(nghttp2_extension *frame,
   altsvc->host_len = *buf.pos;
   ++buf.pos;
 
-  if (nghttp2_buf_len(&buf) < (__int64)altsvc->host_len) {
+  if (nghttp2_buf_len(&buf) < (ssize_t)altsvc->host_len) {
     return NGHTTP2_ERR_FRAME_SIZE_ERROR;
   }
 
@@ -999,7 +999,7 @@ int nghttp2_frame_add_pad(nghttp2_bufs *bufs, nghttp2_frame_hd *hd,
 
   buf = &bufs->head->buf;
 
-  assert(nghttp2_buf_avail(buf) >= (__int64)padlen - 1);
+  assert(nghttp2_buf_avail(buf) >= (ssize_t)padlen - 1);
 
   frame_set_pad(buf, padlen);
 

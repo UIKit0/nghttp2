@@ -16,6 +16,7 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\includes\nghttp2\nghttp2.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\includes\nghttp2\nghttp2ver.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\includes\nghttp2\windows\nghttp2_windows.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_buf.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_callbacks.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_frame.h" />

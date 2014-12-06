@@ -33,9 +33,6 @@
 #include "nghttp2_hd.h"
 #include "nghttp2_buf.h"
 
-// Amar
-#define _U_
-
 #define NGHTTP2_STREAM_ID_MASK ((1u << 31) - 1)
 #define NGHTTP2_PRI_GROUP_ID_MASK ((1u << 31) - 1)
 #define NGHTTP2_PRIORITY_MASK ((1u << 31) - 1)

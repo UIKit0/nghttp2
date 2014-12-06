@@ -33,6 +33,10 @@ extern "C" {
 #include <stdint.h>
 #include <sys/types.h>
 
+#ifdef _MSC_VER
+#include "windows/nghttp2_windows.h"
+#endif /* _MSC_VER */
+
 #include <nghttp2/nghttp2ver.h>
 
 /**
@@ -680,7 +684,7 @@ typedef enum {
  * :enum:`NGHTTP2_ERR_CALLBACK_FAILURE` will signal the entire session
  * failure.
  */
-typedef __int64 (*nghttp2_data_source_read_callback)(
+typedef ssize_t (*nghttp2_data_source_read_callback)(
     nghttp2_session *session, int32_t stream_id, uint8_t *buf, size_t length,
     uint32_t *data_flags, nghttp2_data_source *source, void *user_data);
 
@@ -1111,7 +1115,7 @@ typedef union {
  * To set this callback to :type:`nghttp2_session_callbacks`, use
  * `nghttp2_session_callbacks_set_send_callback()`.
  */
-typedef __int64 (*nghttp2_send_callback)(nghttp2_session *session,
+typedef ssize_t (*nghttp2_send_callback)(nghttp2_session *session,
                                          const uint8_t *data, size_t length,
                                          int flags, void *user_data);
 
@@ -1139,7 +1143,7 @@ typedef __int64 (*nghttp2_send_callback)(nghttp2_session *session,
  * To set this callback to :type:`nghttp2_session_callbacks`, use
  * `nghttp2_session_callbacks_set_recv_callback()`.
  */
-typedef __int64 (*nghttp2_recv_callback)(nghttp2_session *session, uint8_t *buf,
+typedef ssize_t (*nghttp2_recv_callback)(nghttp2_session *session, uint8_t *buf,
                                          size_t length, int flags,
                                          void *user_data);
 
@@ -1451,7 +1455,7 @@ typedef int (*nghttp2_on_header_callback)(nghttp2_session *session,
  * To set this callback to :type:`nghttp2_session_callbacks`, use
  * `nghttp2_session_callbacks_set_select_padding_callback()`.
  */
-typedef __int64 (*nghttp2_select_padding_callback)(nghttp2_session *session,
+typedef ssize_t (*nghttp2_select_padding_callback)(nghttp2_session *session,
                                                    const nghttp2_frame *frame,
                                                    size_t max_payloadlen,
                                                    void *user_data);
@@ -1480,7 +1484,7 @@ typedef __int64 (*nghttp2_select_padding_callback)(nghttp2_session *session,
  * To set this callback to :type:`nghttp2_session_callbacks`, use
  * `nghttp2_session_callbacks_set_data_source_read_length_callback()`.
  */
-typedef __int64 (*nghttp2_data_source_read_length_callback)(
+typedef ssize_t (*nghttp2_data_source_read_length_callback)(
     nghttp2_session *session, uint8_t frame_type, int32_t stream_id,
     int32_t session_remote_window_size, int32_t stream_remote_window_size,
     uint32_t remote_max_frame_size, void *user_data);
@@ -1956,7 +1960,7 @@ int nghttp2_session_send(nghttp2_session *session);
  * :enum:`NGHTTP2_ERR_NOMEM`
  *     Out of memory.
  */
-__int64 nghttp2_session_mem_send(nghttp2_session *session,
+ssize_t nghttp2_session_mem_send(nghttp2_session *session,
                                  const uint8_t **data_ptr);
 
 /**
@@ -2057,7 +2061,7 @@ int nghttp2_session_recv(nghttp2_session *session);
  *     when |session| was configured as server and
  *     `nghttp2_option_set_recv_client_preface()` is used.
  */
-__int64 nghttp2_session_mem_recv(nghttp2_session *session, const uint8_t *in,
+ssize_t nghttp2_session_mem_recv(nghttp2_session *session, const uint8_t *in,
                                  size_t inlen);
 
 /**
@@ -2403,7 +2407,7 @@ int nghttp2_session_upgrade(nghttp2_session *session,
  * :enum:`NGHTTP2_ERR_INSUFF_BUFSIZE`
  *     The provided |buflen| size is too small to hold the output.
  */
-__int64 nghttp2_pack_settings_payload(uint8_t *buf, size_t buflen,
+ssize_t nghttp2_pack_settings_payload(uint8_t *buf, size_t buflen,
                                       const nghttp2_settings_entry *iv,
                                       size_t niv);
 
@@ -3162,7 +3166,7 @@ int nghttp2_hd_deflate_change_table_size(nghttp2_hd_deflater *deflater,
  * :enum:`NGHTTP2_ERR_INSUFF_BUFSIZE`
  *     The provided |buflen| size is too small to hold the output.
  */
-__int64 nghttp2_hd_deflate_hd(nghttp2_hd_deflater *deflater, uint8_t *buf,
+ssize_t nghttp2_hd_deflate_hd(nghttp2_hd_deflater *deflater, uint8_t *buf,
                               size_t buflen, const nghttp2_nv *nva,
                               size_t nvlen);
 
@@ -3284,7 +3288,7 @@ typedef enum {
  *     int inflate_header_block(nghttp2_hd_inflater *hd_inflater,
  *                              uint8_t *in, size_t inlen, int final)
  *     {
- *         __int64 rv;
+ *         ssize_t rv;
  *
  *         for(;;) {
  *             nghttp2_nv nv;
@@ -3321,7 +3325,7 @@ typedef enum {
  *     }
  *
  */
-__int64 nghttp2_hd_inflate_hd(nghttp2_hd_inflater *inflater, nghttp2_nv *nv_out,
+ssize_t nghttp2_hd_inflate_hd(nghttp2_hd_inflater *inflater, nghttp2_nv *nv_out,
                               int *inflate_flags, uint8_t *in, size_t inlen,
                               int in_final);
 
