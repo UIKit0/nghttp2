@@ -142,7 +142,7 @@ static nghttp2_stream *stream_last_sib(nghttp2_stream *stream) {
 }
 
 static nghttp2_stream *stream_update_dep_length(nghttp2_stream *stream,
-                                                __int64 delta) {
+                                                ssize_t delta) {
   stream->num_substreams += delta;
 
   stream = stream_first_sib(stream);
@@ -907,7 +907,6 @@ void nghttp2_stream_dep_remove_subtree(nghttp2_stream *stream) {
   if (dep_prev) {
     dep_prev->sum_dep_weight -= stream->weight;
 
-    // Amar
     root_stream = stream_update_dep_length(dep_prev, (0-(stream->num_substreams)));
 
     stream_update_dep_sum_norest_weight(root_stream);

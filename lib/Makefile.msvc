@@ -46,7 +46,7 @@ NGHTTP2_PDB_R = $(OBJ_DIR)/nghttp2.pdb
 NGHTTP2_PDB_D = $(OBJ_DIR)/nghttp2d.pdb
 
 CC       = cl
-CFLAGS   = -I./includes -I$(ZLIB_ROOT) -DHAVE_WINSOCK2_H -D__int64=long
+CFLAGS   = -I./includes -I$(ZLIB_ROOT) -DHAVE_WINSOCK2_H -Dssize_t=long
 
 CFLAGS_R = -nologo -MD  -W3 -Zi -Fd./$(NGHTTP2_PDB_R)
 CFLAGS_D = -nologo -MDd -W3 -Zi -Fd./$(NGHTTP2_PDB_D) \
