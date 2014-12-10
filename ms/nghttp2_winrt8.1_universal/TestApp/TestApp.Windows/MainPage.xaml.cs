@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using WinRTC;
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace TestApp
@@ -22,6 +23,11 @@ namespace TestApp
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public static class GlobalVar
+        {
+            public static readonly WinRTCClass winRtcClass = new WinRTCClass();
+        }
+
         public MainPage()
         {
             this.InitializeComponent();
@@ -29,7 +35,8 @@ namespace TestApp
 
         private void testButton_Click(object sender, RoutedEventArgs e)
         {
-            testButton.Content = "Clicked";
+            int i = GlobalVar.winRtcClass.InvokeTest();
+            testButton.Content = "Clicked! " + i.ToString();
         }
     }
 }
