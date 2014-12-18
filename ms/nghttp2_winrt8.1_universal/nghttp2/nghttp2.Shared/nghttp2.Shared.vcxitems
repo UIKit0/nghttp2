@@ -35,6 +35,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_session.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_stream.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_submit.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\third-party\http-parser\http_parser.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)targetver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -45,6 +46,7 @@
     <None Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\libnghttp2.pc.in" />
     <None Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\Makefile.am" />
     <None Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\Makefile.msvc" />
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\..\third-party\http-parser\http_parser.gyp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_buf.c" />
@@ -65,5 +67,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_stream.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_submit.c" />
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_version.c" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\third-party\http-parser\http_parser.c" />
   </ItemGroup>
 </Project>

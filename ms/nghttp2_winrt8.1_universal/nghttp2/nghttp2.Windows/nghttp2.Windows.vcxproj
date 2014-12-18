@@ -94,11 +94,11 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <NuGetPackageImportStamp>3c8df1d1</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>48dc0aa8</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <GenerateManifest>false</GenerateManifest>
-    <IncludePath>$(SolutionDir)\..\..\lib\includes\;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\vivek\Documents\GitHub\openssl\inc32;C:\Users\vivek\Documents\GitHub\boost;$(SolutionDir)\..\..\examples;$(SolutionDir)\..\..\lib\includes;$(SolutionDir)\..\..\third-party;%(AdditionalIncludeDirectories);$(SolutionDir)\..\..\lib\includes\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <GenerateManifest>false</GenerateManifest>
@@ -106,7 +106,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <GenerateManifest>false</GenerateManifest>
-    <IncludePath>$(SolutionDir)\..\..\lib\includes\;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\vivek\Documents\GitHub\openssl\inc32;C:\Users\vivek\Documents\GitHub\boost;$(SolutionDir)\..\..\examples;$(SolutionDir)\..\..\lib\includes;$(SolutionDir)\..\..\third-party;%(AdditionalIncludeDirectories);$(SolutionDir)\..\..\lib\includes\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <GenerateManifest>false</GenerateManifest>
@@ -114,7 +114,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <GenerateManifest>false</GenerateManifest>
-    <IncludePath>$(SolutionDir)\..\..\lib\includes\;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\vivek\Documents\GitHub\openssl\inc32;C:\Users\vivek\Documents\GitHub\boost;$(SolutionDir)\..\..\examples;$(SolutionDir)\..\..\lib\includes;$(SolutionDir)\..\..\third-party;%(AdditionalIncludeDirectories);$(SolutionDir)\..\..\lib\includes\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <GenerateManifest>false</GenerateManifest>
@@ -125,7 +125,8 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\nghttp2\nghttp2\lib\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vivek\Documents\GitHub\openssl\inc32;$(SolutionDir)\..\..\lib\includes;$(SolutionDir)\..\..\third-party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -155,7 +156,8 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\nghttp2\nghttp2\lib\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vivek\Documents\GitHub\openssl\inc32;$(SolutionDir)\..\..\lib\includes;$(SolutionDir)\..\..\third-party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -181,7 +183,8 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <CompileAsWinRT>false</CompileAsWinRT>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)\nghttp2\nghttp2\lib\includes;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\vivek\Documents\GitHub\openssl\inc32;$(SolutionDir)\..\..\lib\includes;$(SolutionDir)\..\..\third-party;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ExceptionHandling>Async</ExceptionHandling>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -206,7 +209,6 @@
   <ImportGroup Label="ExtensionTargets">
     <Import Project="..\..\packages\zlib.redist.1.2.8.7\build\native\zlib.redist.targets" Condition="Exists('..\..\packages\zlib.redist.1.2.8.7\build\native\zlib.redist.targets')" />
     <Import Project="..\..\packages\zlib.1.2.8.7\build\native\zlib.targets" Condition="Exists('..\..\packages\zlib.1.2.8.7\build\native\zlib.targets')" />
-    <Import Project="..\..\packages\boost.1.57.0.0\build\native\boost.targets" Condition="Exists('..\..\packages\boost.1.57.0.0\build\native\boost.targets')" />
   </ImportGroup>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
@@ -214,6 +216,5 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\..\packages\zlib.redist.1.2.8.7\build\native\zlib.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\zlib.redist.1.2.8.7\build\native\zlib.redist.targets'))" />
     <Error Condition="!Exists('..\..\packages\zlib.1.2.8.7\build\native\zlib.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\zlib.1.2.8.7\build\native\zlib.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost.1.57.0.0\build\native\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost.1.57.0.0\build\native\boost.targets'))" />
   </Target>
 </Project>

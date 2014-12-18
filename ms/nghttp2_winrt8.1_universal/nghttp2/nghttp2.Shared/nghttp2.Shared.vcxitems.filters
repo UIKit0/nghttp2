@@ -65,6 +65,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\includes\nghttp2\windows\nghttp2_windows.h">
       <Filter>Includes</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\third-party\http-parser\http_parser.h">
+      <Filter>third-party</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Includes">
@@ -72,6 +75,9 @@
     </Filter>
     <Filter Include="Lib">
       <UniqueIdentifier>{98cb6eb6-6626-499e-b63a-d60f16efeba7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="third-party">
+      <UniqueIdentifier>{2a2fdf48-c954-41ff-8a47-0d182b173f57}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +92,9 @@
     </None>
     <None Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\Makefile.msvc">
       <Filter>Lib</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)..\..\..\..\third-party\http-parser\http_parser.gyp">
+      <Filter>third-party</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +151,9 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\lib\nghttp2_version.c">
       <Filter>Lib</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\third-party\http-parser\http_parser.c">
+      <Filter>third-party</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

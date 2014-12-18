@@ -14,10 +14,12 @@
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\examples\asio-client.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)WinRTCClass.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\examples\asio-client.cc" />
     <ClCompile Include="$(MSBuildThisFileDirectory)WinRTCClass.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>

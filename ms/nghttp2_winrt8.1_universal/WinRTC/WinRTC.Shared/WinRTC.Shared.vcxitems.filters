@@ -3,11 +3,13 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)pch.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)WinRTCClass.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\..\examples\asio-client.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)WinRTCClass.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\..\examples\asio-client.cc" />
   </ItemGroup>
 </Project>
