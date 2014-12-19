@@ -48,7 +48,7 @@
 #include <sstream>
 #include <cstdlib>
 
-#define BOOST_ASIO_WINDOWS_RUNTIME 1
+
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include <boost/noncopyable.hpp>
