@@ -48,15 +48,12 @@
 #include <sstream>
 #include <cstdlib>
 
+#ifdef WINAPI_FAMILY_APP
+#define BOOST_ASIO_WINDOWS_RUNTIME 1
+#endif
 
-#include <boost/bind.hpp>
 #include <boost/asio.hpp>
-#include <boost/noncopyable.hpp>
-#include <boost/asio/ssl.hpp>
-#include <boost/asio/deadline_timer.hpp>
-#include <boost/asio/basic_stream_socket.hpp>
 #include <boost/lexical_cast.hpp>
-
 #include <signal.h>
 #include <openssl/ssl.h>
 #include <openssl/err.h>
@@ -64,12 +61,10 @@
 
 #include "http-parser/http_parser.h"
 
-
 #include <nghttp2/nghttp2.h>
 #include <asio-client.h>
 
 using namespace asio_http2_test_client;
-using namespace std;
 #define ARRLEN(x) (sizeof(x) / sizeof(x[0]))
 
 #define MAKE_NV(NAME, VALUE, VALUELEN)                                         \
@@ -159,9 +154,11 @@ static int on_data_chunk_recv_callback(nghttp2_session *session _U_,
   Http2Connection *connection = (Http2Connection *) user_data;
   
   if (connection->stream()->stream_id() == stream_id) {
-    std::cout.write((const char*)data, len);
-
+#ifdef WINAPI_FAMILY_APP
     OutputDebugStringA((const char*) data);
+#else 
+    std::cout.write((const char*)data, len);
+#endif
   }
   
   return 0;
@@ -284,10 +281,10 @@ state_(kConnectionStateNotConnected)
   boost::asio::ip::tcp::resolver::query query(stream_->host(), stream_->port());
   boost::asio::ip::tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
   
-  socket_->set_verify_mode(boost::asio::ssl::verify_none);
-//  socket_->set_verify_callback(boost::bind(&Http2Connection::verify_certificate, this, _1, _2));
+  socket_->set_verify_mode(boost::asio::ssl::verify_peer);
+  socket_->set_verify_callback(boost::bind(&Http2Connection::verify_certificate, this, _1, _2));
   
-  boost::asio::async_connect(socket_->lowest_layer(), endpoint_iterator,
+ boost::asio::async_connect(socket_->lowest_layer(), endpoint_iterator,
                              boost::bind(&Http2Connection::handle_connect, this,
                                          boost::asio::placeholders::error));
   
@@ -366,25 +363,25 @@ void Http2Connection::end()
   }
 }
 
-//bool Http2Connection::verify_certificate(bool preverified,
-//                        boost::asio::ssl::verify_context& ctx)
-//{
-//  std::cerr << "verify_certificate " << preverified << std::endl;
-//  // The verify callback can be used to check whether the certificate that is
-//  // being presented is valid for the peer. For example, RFC 2818 describes
-//  // the steps involved in doing this for HTTPS. Consult the OpenSSL
-//  // documentation for more details. Note that the callback is called once
-//  // for each certificate in the certificate chain, starting from the root
-//  // certificate authority.
-//  
-//  // In this example we will simply print the certificate's subject name.
-//  //char subject_name[256];
-//  //X509* cert = X509_STORE_CTX_get_current_cert(ctx.native_handle());
-//  //X509_NAME_oneline(X509_get_subject_name(cert), subject_name, 256);
-//  //std::cerr << "Verifying " << subject_name << std::endl;
-//
-//  return true;
-//}
+bool Http2Connection::verify_certificate(bool preverified,
+                        boost::asio::ssl::verify_context& ctx)
+{
+  std::cerr << "verify_certificate " << preverified << std::endl;
+  // The verify callback can be used to check whether the certificate that is
+  // being presented is valid for the peer. For example, RFC 2818 describes
+  // the steps involved in doing this for HTTPS. Consult the OpenSSL
+  // documentation for more details. Note that the callback is called once
+  // for each certificate in the certificate chain, starting from the root
+  // certificate authority.
+  
+  // In this example we will simply print the certificate's subject name.
+  //char subject_name[256];
+  //X509* cert = X509_STORE_CTX_get_current_cert(ctx.native_handle());
+  //X509_NAME_oneline(X509_get_subject_name(cert), subject_name, 256);
+  //std::cerr << "Verifying " << subject_name << std::endl;
+
+  return true;
+}
 
 void Http2Connection::handle_connect(const boost::system::error_code& error)
 {
@@ -392,15 +389,19 @@ void Http2Connection::handle_connect(const boost::system::error_code& error)
   {
     state_ = kConnectionStateConnected;
 
-    std::string localAddress = boost::lexical_cast<std::string>(socket_->next_layer().local_endpoint());
-    std::string remoteAddress = boost::lexical_cast<std::string>(socket_->next_layer().remote_endpoint());
+    std::string local_address = boost::lexical_cast<std::string>(socket_->next_layer().local_endpoint());
+    std::string remote_address = boost::lexical_cast<std::string>(socket_->next_layer().remote_endpoint());
 
-
-    OutputDebugStringA("\nLocal address:");
-    OutputDebugStringA(localAddress.c_str());
-    OutputDebugStringA("\nRemote address:");
-    OutputDebugStringA(remoteAddress.c_str());
+#if WINAPI_FAMILY_APP
+    OutputDebugStringA("\nLocal address: ");
+    OutputDebugStringA(local_address.c_str());
+    OutputDebugStringA("\nRemote address: ");
+    OutputDebugStringA(remote_address.c_str());
     OutputDebugStringA("\n");
+#else
+    std::cerr << std::endl << "Local address: " << local_address << std::endl;
+    std::cerr << "Remote address: " << remote_address << std::endl;
+#endif
 
     socket_->async_handshake(boost::asio::ssl::stream_base::client,
                              boost::bind(&Http2Connection::handle_handshake, this,
@@ -449,30 +450,6 @@ void Http2Connection::queue_write(uint8_t *to_send, size_t length)
 
 void Http2Connection::perform_write()
 {
-    OutputDebugStringA("perform_write \n");
-
-    {
-        ostringstream oss;
-        oss << "size: " << dec << outbox_.size() << endl;
-
-    for (int i = 0; i < outbox_.size(); i++) {
-        oss << "0x" << hex << (int)outbox_[i] << " ";
-    }
-    oss << endl;
-    OutputDebugStringA(oss.str().c_str());
-    }
-
-    {
-        OutputDebugStringA("chars \n");
-
-        ostringstream oss;
-        for (int i = 0; i < outbox_.size(); i++) {
-            oss << (char)outbox_[i] << " ";
-        }
-        oss << endl;
-        OutputDebugStringA(oss.str().c_str());
-    }
-
   boost::asio::async_write(*(socket_.get()),
                            boost::asio::buffer(&outbox_[0], outbox_.size()),
                            strand_.wrap(boost::bind(
@@ -526,22 +503,6 @@ void Http2Connection::handle_read(const boost::system::error_code& error,
 {
   read_timer_.cancel();
 
-  OutputDebugStringA("handle_read \n");
-  ostringstream oss;
-  oss << "size: " << dec << bytes_transferred << endl;
-  for (int i = 0; i < bytes_transferred; i++) {
-      oss << "0x" << hex << (int)inbox_[i] << " ";
-  }
-  oss << endl;
-  OutputDebugStringA(oss.str().c_str());
-/*
-  oss.clear();
-  for (int i = 0; i < bytes_transferred; i++) {
-      oss << (char)inbox_[i] << " / ";
-  }
-  oss << endl;
-  OutputDebugStringA(oss.str().c_str());
-*/
   if (!error && bytes_transferred)
   {
     int64_t readlen = nghttp2_session_mem_recv(session(), &inbox_[0], bytes_transferred);
@@ -643,30 +604,32 @@ void runWithUri(const char *uri)
   std::shared_ptr<Http2Client> client = std::make_shared<Http2Client>(io_service, ssl_ctx);
   
   client->connect(uri);
-  OutputDebugStringA(uri);
   io_service->run();
 }
 
-//int main(int argc, char *argv[])
-//{
-//  try {
-//    struct sigaction act;
-//    
-//    if (argc < 2) {
-//      std::cerr << "Usage: asio-client HTTPS_URI" << std::endl;
-//      exit(EXIT_FAILURE);
-//    }
-//    
-//    memset(&act, 0, sizeof(struct sigaction));
-//    act.sa_handler = SIG_IGN;
-//    sigaction(SIGPIPE, &act, NULL);
-//    
-//    run(argv[1]);
-//    
-//  } catch (std::exception &e) {
-//    std::cerr << "exception: " << e.what() << "\n";
-//  }
-//  
-//  return 0;
-//}
+#ifndef WINAPI_FAMILY_APP
+int main(int argc, char *argv[])
+{
+  try {
+    struct sigaction act;
+    
+    if (argc < 2) {
+      std::cerr << "Usage: asio-client HTTPS_URI" << std::endl;
+      exit(EXIT_FAILURE);
+    }
+    
+    memset(&act, 0, sizeof(struct sigaction));
+    act.sa_handler = SIG_IGN;
+    sigaction(SIGPIPE, &act, NULL);
+    
+    run(argv[1]);
+    
+  } catch (std::exception &e) {
+    std::cerr << "exception: " << e.what() << "\n";
+  }
+  
+  return 0;
+}
+#endif //WINAPI_FAMILY_APP
+
 

@@ -30,11 +30,8 @@
 #ifndef NGHTTP2_ASIO_CLIENT_H
 #define NGHTTP2_ASIO_CLIENT_H
 
-#define BOOST_ASIO_WINDOWS_RUNTIME 1
-#include <boost/system/config.hpp>
 #include <boost/bind.hpp>
 #include <boost/asio.hpp>
-#include <boost/noncopyable.hpp>
 #include <boost/asio/ssl.hpp>
 #include <boost/asio/deadline_timer.hpp>
 #include <boost/asio/basic_stream_socket.hpp>
@@ -123,9 +120,9 @@ public:
   
 private:
   void end();
-  /*
+  
   bool verify_certificate(bool preverified,
-                          boost::asio::ssl::verify_context& ctx);*/
+                          boost::asio::ssl::verify_context& ctx);
   void handle_connect(const boost::system::error_code& error);
   
   void handle_handshake(const boost::system::error_code& error);
@@ -160,5 +157,6 @@ private:
 };
   
 }// namespace asio_http2_test_client
+
 
 #endif

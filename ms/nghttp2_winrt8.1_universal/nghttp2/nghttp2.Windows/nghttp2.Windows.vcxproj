@@ -95,7 +95,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <GenerateManifest>false</GenerateManifest>
-    <IncludePath>C:\Users\vivek\Documents\GitHub\openssl\inc32;C:\Users\vivek\Documents\GitHub\boost;$(SolutionDir)\..\..\examples;$(SolutionDir)\..\..\lib\includes;$(SolutionDir)\..\..\third-party;%(AdditionalIncludeDirectories);$(SolutionDir)\..\..\lib\includes\;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\vivek\Documents\GitHub\openssl\inc32;$(SolutionDir)\..\..\examples;$(SolutionDir)\..\..\lib\includes;$(SolutionDir)\..\..\third-party;%(AdditionalIncludeDirectories);$(SolutionDir)\..\..\lib\includes\;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <GenerateManifest>false</GenerateManifest>

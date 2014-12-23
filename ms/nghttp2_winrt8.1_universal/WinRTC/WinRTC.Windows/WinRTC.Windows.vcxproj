@@ -31,9 +31,6 @@
       <Project>{0e46768c-6829-462b-b99f-971e43f90f82}</Project>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{347cd874-5a85-4511-94aa-988f1dff4f7d}</ProjectGuid>
     <RootNamespace>WinRTC</RootNamespace>
@@ -99,7 +96,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <NuGetPackageImportStamp>978d0a71</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>1e5a9b6e</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <GenerateManifest>false</GenerateManifest>
@@ -122,19 +119,19 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PreprocessorDefinitions>_WINRT_DLL;BOOST_ASIO_WINDOWS_RUNTIME=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_WINRT_DLL;BOOST_ASIO_WINDOWS_RUNTIME=1;BOOST_REGEX_NO_LIB=1;BOOST_DATE_TIME_NO_LIB=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
       <AdditionalUsingDirectories>$(WindowsSDK_WindowsMetadata);$(AdditionalUsingDirectories)</AdditionalUsingDirectories>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <DisableSpecificWarnings>28204</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);C:\Users\vivek\Documents\GitHub\openssl\inc32;C:\Users\vivek\Documents\GitHub\boost;$(SolutionDir)\..\..\examples;$(SolutionDir)\..\..\lib\includes;$(SolutionDir)\..\..\third-party</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\boost;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);C:\Users\vivek\Documents\GitHub\openssl\inc32;$(SolutionDir)\..\..\examples;$(SolutionDir)\..\..\lib\includes;$(SolutionDir)\..\..\third-party</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <AdditionalDependencies>runtimeobject.lib;%(AdditionalDependencies);openssl.lib;libeay32.lib;ssleay32.lib;ws2_32.lib</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalLibraryDirectories>C:\Users\vivek\Documents\GitHub\openssl\vsout\NT-Store-8.1-Static-Unicode\Debug\Win32\bin</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Users\vivek\Documents\GitHub\openssl\vsout\NT-Store-8.1-Static-Unicode\Debug\Win32\bin;C:\boost\bin.v2\libs\system\build\msvc-12.0\debug\link-static\threading-multi\windows-api-store</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -222,79 +219,5 @@
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\..\packages\boost.1.57.0.0\build\native\boost.targets" Condition="Exists('..\..\packages\boost.1.57.0.0\build\native\boost.targets')" />
-    <Import Project="..\..\packages\boost_atomic-vc120.1.57.0.0\build\native\boost_atomic-vc120.targets" Condition="Exists('..\..\packages\boost_atomic-vc120.1.57.0.0\build\native\boost_atomic-vc120.targets')" />
-    <Import Project="..\..\packages\boost_chrono-vc120.1.57.0.0\build\native\boost_chrono-vc120.targets" Condition="Exists('..\..\packages\boost_chrono-vc120.1.57.0.0\build\native\boost_chrono-vc120.targets')" />
-    <Import Project="..\..\packages\boost_container-vc120.1.57.0.0\build\native\boost_container-vc120.targets" Condition="Exists('..\..\packages\boost_container-vc120.1.57.0.0\build\native\boost_container-vc120.targets')" />
-    <Import Project="..\..\packages\boost_context-vc120.1.57.0.0\build\native\boost_context-vc120.targets" Condition="Exists('..\..\packages\boost_context-vc120.1.57.0.0\build\native\boost_context-vc120.targets')" />
-    <Import Project="..\..\packages\boost_coroutine-vc120.1.57.0.0\build\native\boost_coroutine-vc120.targets" Condition="Exists('..\..\packages\boost_coroutine-vc120.1.57.0.0\build\native\boost_coroutine-vc120.targets')" />
-    <Import Project="..\..\packages\boost_date_time-vc120.1.57.0.0\build\native\boost_date_time-vc120.targets" Condition="Exists('..\..\packages\boost_date_time-vc120.1.57.0.0\build\native\boost_date_time-vc120.targets')" />
-    <Import Project="..\..\packages\boost_filesystem-vc120.1.57.0.0\build\native\boost_filesystem-vc120.targets" Condition="Exists('..\..\packages\boost_filesystem-vc120.1.57.0.0\build\native\boost_filesystem-vc120.targets')" />
-    <Import Project="..\..\packages\boost_graph-vc120.1.57.0.0\build\native\boost_graph-vc120.targets" Condition="Exists('..\..\packages\boost_graph-vc120.1.57.0.0\build\native\boost_graph-vc120.targets')" />
-    <Import Project="..\..\packages\boost_iostreams-vc120.1.57.0.0\build\native\boost_iostreams-vc120.targets" Condition="Exists('..\..\packages\boost_iostreams-vc120.1.57.0.0\build\native\boost_iostreams-vc120.targets')" />
-    <Import Project="..\..\packages\boost_locale-vc120.1.57.0.0\build\native\boost_locale-vc120.targets" Condition="Exists('..\..\packages\boost_locale-vc120.1.57.0.0\build\native\boost_locale-vc120.targets')" />
-    <Import Project="..\..\packages\boost_log-vc120.1.57.0.0\build\native\boost_log-vc120.targets" Condition="Exists('..\..\packages\boost_log-vc120.1.57.0.0\build\native\boost_log-vc120.targets')" />
-    <Import Project="..\..\packages\boost_log_setup-vc120.1.57.0.0\build\native\boost_log_setup-vc120.targets" Condition="Exists('..\..\packages\boost_log_setup-vc120.1.57.0.0\build\native\boost_log_setup-vc120.targets')" />
-    <Import Project="..\..\packages\boost_math_c99-vc120.1.57.0.0\build\native\boost_math_c99-vc120.targets" Condition="Exists('..\..\packages\boost_math_c99-vc120.1.57.0.0\build\native\boost_math_c99-vc120.targets')" />
-    <Import Project="..\..\packages\boost_math_c99f-vc120.1.57.0.0\build\native\boost_math_c99f-vc120.targets" Condition="Exists('..\..\packages\boost_math_c99f-vc120.1.57.0.0\build\native\boost_math_c99f-vc120.targets')" />
-    <Import Project="..\..\packages\boost_math_c99l-vc120.1.57.0.0\build\native\boost_math_c99l-vc120.targets" Condition="Exists('..\..\packages\boost_math_c99l-vc120.1.57.0.0\build\native\boost_math_c99l-vc120.targets')" />
-    <Import Project="..\..\packages\boost_math_tr1-vc120.1.57.0.0\build\native\boost_math_tr1-vc120.targets" Condition="Exists('..\..\packages\boost_math_tr1-vc120.1.57.0.0\build\native\boost_math_tr1-vc120.targets')" />
-    <Import Project="..\..\packages\boost_math_tr1f-vc120.1.57.0.0\build\native\boost_math_tr1f-vc120.targets" Condition="Exists('..\..\packages\boost_math_tr1f-vc120.1.57.0.0\build\native\boost_math_tr1f-vc120.targets')" />
-    <Import Project="..\..\packages\boost_math_tr1l-vc120.1.57.0.0\build\native\boost_math_tr1l-vc120.targets" Condition="Exists('..\..\packages\boost_math_tr1l-vc120.1.57.0.0\build\native\boost_math_tr1l-vc120.targets')" />
-    <Import Project="..\..\packages\boost_prg_exec_monitor-vc120.1.57.0.0\build\native\boost_prg_exec_monitor-vc120.targets" Condition="Exists('..\..\packages\boost_prg_exec_monitor-vc120.1.57.0.0\build\native\boost_prg_exec_monitor-vc120.targets')" />
-    <Import Project="..\..\packages\boost_program_options-vc120.1.57.0.0\build\native\boost_program_options-vc120.targets" Condition="Exists('..\..\packages\boost_program_options-vc120.1.57.0.0\build\native\boost_program_options-vc120.targets')" />
-    <Import Project="..\..\packages\boost_random-vc120.1.57.0.0\build\native\boost_random-vc120.targets" Condition="Exists('..\..\packages\boost_random-vc120.1.57.0.0\build\native\boost_random-vc120.targets')" />
-    <Import Project="..\..\packages\boost_regex-vc120.1.57.0.0\build\native\boost_regex-vc120.targets" Condition="Exists('..\..\packages\boost_regex-vc120.1.57.0.0\build\native\boost_regex-vc120.targets')" />
-    <Import Project="..\..\packages\boost_serialization-vc120.1.57.0.0\build\native\boost_serialization-vc120.targets" Condition="Exists('..\..\packages\boost_serialization-vc120.1.57.0.0\build\native\boost_serialization-vc120.targets')" />
-    <Import Project="..\..\packages\boost_signals-vc120.1.57.0.0\build\native\boost_signals-vc120.targets" Condition="Exists('..\..\packages\boost_signals-vc120.1.57.0.0\build\native\boost_signals-vc120.targets')" />
-    <Import Project="..\..\packages\boost_system-vc120.1.57.0.0\build\native\boost_system-vc120.targets" Condition="Exists('..\..\packages\boost_system-vc120.1.57.0.0\build\native\boost_system-vc120.targets')" />
-    <Import Project="..\..\packages\boost_thread-vc120.1.57.0.0\build\native\boost_thread-vc120.targets" Condition="Exists('..\..\packages\boost_thread-vc120.1.57.0.0\build\native\boost_thread-vc120.targets')" />
-    <Import Project="..\..\packages\boost_timer-vc120.1.57.0.0\build\native\boost_timer-vc120.targets" Condition="Exists('..\..\packages\boost_timer-vc120.1.57.0.0\build\native\boost_timer-vc120.targets')" />
-    <Import Project="..\..\packages\boost_unit_test_framework-vc120.1.57.0.0\build\native\boost_unit_test_framework-vc120.targets" Condition="Exists('..\..\packages\boost_unit_test_framework-vc120.1.57.0.0\build\native\boost_unit_test_framework-vc120.targets')" />
-    <Import Project="..\..\packages\boost_wave-vc120.1.57.0.0\build\native\boost_wave-vc120.targets" Condition="Exists('..\..\packages\boost_wave-vc120.1.57.0.0\build\native\boost_wave-vc120.targets')" />
-    <Import Project="..\..\packages\boost_wserialization-vc120.1.57.0.0\build\native\boost_wserialization-vc120.targets" Condition="Exists('..\..\packages\boost_wserialization-vc120.1.57.0.0\build\native\boost_wserialization-vc120.targets')" />
-    <Import Project="..\..\packages\boost_exception-vc120.1.57.0.0\build\native\boost_exception-vc120.targets" Condition="Exists('..\..\packages\boost_exception-vc120.1.57.0.0\build\native\boost_exception-vc120.targets')" />
-    <Import Project="..\..\packages\boost_test_exec_monitor-vc120.1.57.0.0\build\native\boost_test_exec_monitor-vc120.targets" Condition="Exists('..\..\packages\boost_test_exec_monitor-vc120.1.57.0.0\build\native\boost_test_exec_monitor-vc120.targets')" />
-    <Import Project="..\..\packages\boost-vc120.1.57.0.0\build\native\boost-vc120.targets" Condition="Exists('..\..\packages\boost-vc120.1.57.0.0\build\native\boost-vc120.targets')" />
-  </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\boost.1.57.0.0\build\native\boost.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost.1.57.0.0\build\native\boost.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_atomic-vc120.1.57.0.0\build\native\boost_atomic-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_atomic-vc120.1.57.0.0\build\native\boost_atomic-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_chrono-vc120.1.57.0.0\build\native\boost_chrono-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_chrono-vc120.1.57.0.0\build\native\boost_chrono-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_container-vc120.1.57.0.0\build\native\boost_container-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_container-vc120.1.57.0.0\build\native\boost_container-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_context-vc120.1.57.0.0\build\native\boost_context-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_context-vc120.1.57.0.0\build\native\boost_context-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_coroutine-vc120.1.57.0.0\build\native\boost_coroutine-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_coroutine-vc120.1.57.0.0\build\native\boost_coroutine-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_date_time-vc120.1.57.0.0\build\native\boost_date_time-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_date_time-vc120.1.57.0.0\build\native\boost_date_time-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_filesystem-vc120.1.57.0.0\build\native\boost_filesystem-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_filesystem-vc120.1.57.0.0\build\native\boost_filesystem-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_graph-vc120.1.57.0.0\build\native\boost_graph-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_graph-vc120.1.57.0.0\build\native\boost_graph-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_iostreams-vc120.1.57.0.0\build\native\boost_iostreams-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_iostreams-vc120.1.57.0.0\build\native\boost_iostreams-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_locale-vc120.1.57.0.0\build\native\boost_locale-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_locale-vc120.1.57.0.0\build\native\boost_locale-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_log-vc120.1.57.0.0\build\native\boost_log-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_log-vc120.1.57.0.0\build\native\boost_log-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_log_setup-vc120.1.57.0.0\build\native\boost_log_setup-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_log_setup-vc120.1.57.0.0\build\native\boost_log_setup-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_math_c99-vc120.1.57.0.0\build\native\boost_math_c99-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_math_c99-vc120.1.57.0.0\build\native\boost_math_c99-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_math_c99f-vc120.1.57.0.0\build\native\boost_math_c99f-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_math_c99f-vc120.1.57.0.0\build\native\boost_math_c99f-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_math_c99l-vc120.1.57.0.0\build\native\boost_math_c99l-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_math_c99l-vc120.1.57.0.0\build\native\boost_math_c99l-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_math_tr1-vc120.1.57.0.0\build\native\boost_math_tr1-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_math_tr1-vc120.1.57.0.0\build\native\boost_math_tr1-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_math_tr1f-vc120.1.57.0.0\build\native\boost_math_tr1f-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_math_tr1f-vc120.1.57.0.0\build\native\boost_math_tr1f-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_math_tr1l-vc120.1.57.0.0\build\native\boost_math_tr1l-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_math_tr1l-vc120.1.57.0.0\build\native\boost_math_tr1l-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_prg_exec_monitor-vc120.1.57.0.0\build\native\boost_prg_exec_monitor-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_prg_exec_monitor-vc120.1.57.0.0\build\native\boost_prg_exec_monitor-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_program_options-vc120.1.57.0.0\build\native\boost_program_options-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_program_options-vc120.1.57.0.0\build\native\boost_program_options-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_random-vc120.1.57.0.0\build\native\boost_random-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_random-vc120.1.57.0.0\build\native\boost_random-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_regex-vc120.1.57.0.0\build\native\boost_regex-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_regex-vc120.1.57.0.0\build\native\boost_regex-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_serialization-vc120.1.57.0.0\build\native\boost_serialization-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_serialization-vc120.1.57.0.0\build\native\boost_serialization-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_signals-vc120.1.57.0.0\build\native\boost_signals-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_signals-vc120.1.57.0.0\build\native\boost_signals-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_system-vc120.1.57.0.0\build\native\boost_system-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_system-vc120.1.57.0.0\build\native\boost_system-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_thread-vc120.1.57.0.0\build\native\boost_thread-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_thread-vc120.1.57.0.0\build\native\boost_thread-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_timer-vc120.1.57.0.0\build\native\boost_timer-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_timer-vc120.1.57.0.0\build\native\boost_timer-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_unit_test_framework-vc120.1.57.0.0\build\native\boost_unit_test_framework-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_unit_test_framework-vc120.1.57.0.0\build\native\boost_unit_test_framework-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_wave-vc120.1.57.0.0\build\native\boost_wave-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_wave-vc120.1.57.0.0\build\native\boost_wave-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_wserialization-vc120.1.57.0.0\build\native\boost_wserialization-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_wserialization-vc120.1.57.0.0\build\native\boost_wserialization-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_exception-vc120.1.57.0.0\build\native\boost_exception-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_exception-vc120.1.57.0.0\build\native\boost_exception-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost_test_exec_monitor-vc120.1.57.0.0\build\native\boost_test_exec_monitor-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost_test_exec_monitor-vc120.1.57.0.0\build\native\boost_test_exec_monitor-vc120.targets'))" />
-    <Error Condition="!Exists('..\..\packages\boost-vc120.1.57.0.0\build\native\boost-vc120.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\boost-vc120.1.57.0.0\build\native\boost-vc120.targets'))" />
-  </Target>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>
