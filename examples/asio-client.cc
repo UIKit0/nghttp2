@@ -38,8 +38,14 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-
+#ifdef WINAPI_FAMILY_APP
 #include <pch.h>
+#define BOOST_ASIO_WINDOWS_RUNTIME 1
+#else 
+#include <unistd.h>
+#include <fstream>
+#endif
+
 #include <iostream>
 #include <string>
 #include <memory>
@@ -47,10 +53,6 @@
 #include <algorithm>
 #include <sstream>
 #include <cstdlib>
-
-#ifdef WINAPI_FAMILY_APP
-#define BOOST_ASIO_WINDOWS_RUNTIME 1
-#endif
 
 #include <boost/asio.hpp>
 #include <boost/lexical_cast.hpp>
@@ -89,7 +91,7 @@ static ssize_t send_callback(nghttp2_session *session, const uint8_t *data,
 static int on_header_callback(nghttp2_session *session,
                        const nghttp2_frame *frame, const uint8_t *name,
                        size_t namelen, const uint8_t *value,
-                       size_t valuelen, uint8_t flags _U_,
+                       size_t valuelen, uint8_t flags,
                        void *user_data)
 {
   Http2Connection *connection = (Http2Connection *) user_data;
@@ -97,7 +99,7 @@ static int on_header_callback(nghttp2_session *session,
   switch (frame->hd.type) {
     case NGHTTP2_HEADERS:
       if (frame->headers.cat == NGHTTP2_HCAT_RESPONSE &&
-          connection->stream()->stream_id() == frame->hd.stream_id) {
+          connection->stream_info()->stream_id() == frame->hd.stream_id) {
         /* Print response headers for the initiated request. */
         std::cerr << name << ": " << value << std::endl;
         break;
@@ -116,7 +118,7 @@ static int on_begin_headers_callback(nghttp2_session *session,
   switch (frame->hd.type) {
     case NGHTTP2_HEADERS:
       if (frame->headers.cat == NGHTTP2_HCAT_RESPONSE &&
-          connection->stream()->stream_id() == frame->hd.stream_id) {
+          connection->stream_info()->stream_id() == frame->hd.stream_id) {
         std::cerr << "Response headers for stream ID=%d:\n" << frame->hd.stream_id << std::endl;
       }
       break;
@@ -126,14 +128,14 @@ static int on_begin_headers_callback(nghttp2_session *session,
 
 /* nghttp2_on_frame_recv_callback: Called when nghttp2 library
  received a complete frame from the remote peer. */
-static int on_frame_recv_callback(nghttp2_session *session _U_,
+static int on_frame_recv_callback(nghttp2_session *session,
                            const nghttp2_frame *frame, void *user_data)
 {
   Http2Connection *connection = (Http2Connection *) user_data;
   switch (frame->hd.type) {
     case NGHTTP2_HEADERS:
       if (frame->headers.cat == NGHTTP2_HCAT_RESPONSE &&
-          connection->stream()->stream_id() == frame->hd.stream_id) {
+          connection->stream_info()->stream_id() == frame->hd.stream_id) {
         std::cerr << "All headers received" << std::endl;
       }
       break;
@@ -146,14 +148,14 @@ static int on_frame_recv_callback(nghttp2_session *session _U_,
  is meant to the stream we initiated, print the received data in
  stdout, so that the user can redirect its output to the file
  easily. */
-static int on_data_chunk_recv_callback(nghttp2_session *session _U_,
-                                uint8_t flags _U_, int32_t stream_id,
+static int on_data_chunk_recv_callback(nghttp2_session *session,
+                                uint8_t flags, int32_t stream_id,
                                 const uint8_t *data, size_t len,
                                 void *user_data)
 {
   Http2Connection *connection = (Http2Connection *) user_data;
   
-  if (connection->stream()->stream_id() == stream_id) {
+  if (connection->stream_info()->stream_id() == stream_id) {
 #ifdef WINAPI_FAMILY_APP
     OutputDebugStringA((const char*) data);
 #else 
@@ -175,7 +177,7 @@ static int on_stream_close_callback(nghttp2_session *session, int32_t stream_id,
   int rv;
   Http2Connection *connection = (Http2Connection *) user_data;
   
-  if (connection->stream()->stream_id() == stream_id) {
+  if (connection->stream_info()->stream_id() == stream_id) {
     std::cerr << "Stream " << stream_id << " closed with error: " << error_code << std::endl;
     
     connection->nghttp2_stream_closed(stream_id);
@@ -198,11 +200,25 @@ void Http2Client::connect(std::string uri)
 
 void Http2Client::on_connect()
 {
-  connection_->send_request("GET");
+  if (request_string_.empty()) {
+    std::cerr << "no request string\n";
+    connection_->send_request_with_method("GET");
+  }
+  else {
+    std::cerr << "request name "<< request_string_ << " \n";
+    connection_->send_request_with_method(request_string_);
+  }
+}
+  
+void Http2Client::set_connection_timeout(uint32_t connection_timeout)
+{
+  std::cerr << "Setting Connection Timeout " << connection_timeout << std::endl;
+  connection_->set_connection_timeout(connection_timeout);
 }
 
+
 //******************************************************************************************
-Http2Stream::Http2Stream(const char *uri)
+Http2StreamInfo::Http2StreamInfo(const char *uri)
 {
   uri_ = uri;
   stream_id_ = -1;
@@ -219,6 +235,9 @@ Http2Stream::Http2Stream(const char *uri)
   
   host_ = authority_;
   
+  scheme_ = &uri[u.field_data[UF_SCHEMA].off];
+  scheme_.resize(u.field_data[UF_SCHEMA].len);
+  
   if (u.field_set & (1 << UF_PORT)) {
     std::ostringstream oss;
     oss << u.port;
@@ -226,9 +245,13 @@ Http2Stream::Http2Stream(const char *uri)
     
     authority_.append(port_);
   }
-  else {
+  else if(scheme_=="https"){
     port_ = "443";
   }
+  else {
+    port_ = "80";
+  }
+  
   
   size_t pathlen = 0;
   path_ = "";
@@ -252,12 +275,9 @@ Http2Stream::Http2Stream(const char *uri)
       path_.append(query);
     }
   }
-  
-  scheme_ = &uri[u.field_data[UF_SCHEMA].off];
-  scheme_.resize(u.field_data[UF_SCHEMA].len);
 }
 
-void Http2Stream::set_stream_id(int32_t stream_id)
+void Http2StreamInfo::set_stream_id(int32_t stream_id)
 {
   stream_id_ = stream_id;
 }
@@ -270,21 +290,22 @@ strand_(*(client->io_service().get())),
 read_timer_(*(client->io_service().get())),
 outbox_(),
 inbox_(),
+connection_timeout_(0),
 state_(kConnectionStateNotConnected)
 {
   socket_ = std::make_shared<boost::asio::ssl::stream<boost::asio::ip::tcp::socket> >(*(client->io_service().get()), *(client->ssl_ctx().get()));
-  stream_ = std::make_shared<Http2Stream>(uri.c_str());
+  stream_info_ = std::make_shared<Http2StreamInfo>(uri.c_str());
   session_ = NULL;
   inbox_.resize(1024);
   
   boost::asio::ip::tcp::resolver resolver(*(client->io_service().get()));
-  boost::asio::ip::tcp::resolver::query query(stream_->host(), stream_->port());
+  boost::asio::ip::tcp::resolver::query query(stream_info()->host(), stream_info()->port());
   boost::asio::ip::tcp::resolver::iterator endpoint_iterator = resolver.resolve(query);
   
-  socket_->set_verify_mode(boost::asio::ssl::verify_peer);
-  socket_->set_verify_callback(boost::bind(&Http2Connection::verify_certificate, this, _1, _2));
+  socket()->set_verify_mode(boost::asio::ssl::verify_peer);
+  socket()->set_verify_callback(boost::bind(&Http2Connection::verify_certificate, this, _1, _2));
   
- boost::asio::async_connect(socket_->lowest_layer(), endpoint_iterator,
+  boost::asio::async_connect(socket()->lowest_layer(), endpoint_iterator,
                              boost::bind(&Http2Connection::handle_connect, this,
                                          boost::asio::placeholders::error));
   
@@ -297,43 +318,48 @@ Http2Connection::~Http2Connection()
   }
 }
 
-void Http2Connection::send_request(std::string method_name)
+void Http2Connection::send_request_with_method(std::string method_name)
 {
-  std::string uri = stream()->uri();
+  std::string uri = stream_info()->uri();
   
-  char *streamValBuf = (char*)malloc(stream()->scheme().length()+1);
-  memset(streamValBuf, 0, stream()->scheme().length() + 1);
-  memcpy(streamValBuf, stream()->scheme().c_str(), stream()->scheme().length());
+  char *streamValBuf = (char*)malloc(stream_info()->scheme().length()+1);
+  memset(streamValBuf, 0, stream_info()->scheme().length() + 1);
+  memcpy(streamValBuf, stream_info()->scheme().c_str(), stream_info()->scheme().length());
 
-  char *authValBuf = (char*)malloc(stream()->authority().length() + 1);
-  memset(authValBuf, 0, stream()->authority().length() + 1);
-  memcpy(authValBuf, stream()->authority().c_str(), stream()->authority().length());
+  char *authValBuf = (char*)malloc(stream_info()->authority().length() + 1);
+  memset(authValBuf, 0, stream_info()->authority().length() + 1);
+  memcpy(authValBuf, stream_info()->authority().c_str(), stream_info()->authority().length());
 
-  char *pathValBuf = (char*)malloc(stream()->path().length() + 1);
-  memset(pathValBuf, 0, stream()->path().length() + 1);
-  memcpy(pathValBuf, stream()->path().c_str(), stream()->path().length());
+  char *pathValBuf = (char*)malloc(stream_info()->path().length() + 1);
+  memset(pathValBuf, 0, stream_info()->path().length() + 1);
+  memcpy(pathValBuf, stream_info()->path().c_str(), stream_info()->path().length());
 
   nghttp2_nv hdrs[] = {
     MAKE_NV(":method", method_name.c_str(), method_name.length()),
-    MAKE_NV(":scheme", streamValBuf, stream()->scheme().length()),
-    MAKE_NV(":authority", authValBuf, stream()->authority().length()),
-    MAKE_NV(":path", pathValBuf, stream()->path().length())};
+    MAKE_NV(":scheme", streamValBuf, stream_info()->scheme().length()),
+    MAKE_NV(":authority", authValBuf, stream_info()->authority().length()),
+    MAKE_NV(":path", pathValBuf, stream_info()->path().length())};
   
+
   int32_t stream_id = nghttp2_submit_request(session(), NULL, hdrs,
-                                             ARRLEN(hdrs), NULL, stream().get());
+                                             ARRLEN(hdrs), NULL, stream_info().get());
   if (stream_id < 0) {
     std::cerr << "Could not submit HTTP2 request: "<< nghttp2_strerror(stream_id) << std::endl;
   }
   
-  stream()->set_stream_id(stream_id);
+  stream_info()->set_stream_id(stream_id);
   
   int rv = nghttp2_session_send(session());
   if (rv != 0) {
     std::cerr << "Fatal error: " << nghttp2_strerror(rv) << std::endl;
     end();
   }
+  
+  free(streamValBuf);
+  free(authValBuf);
+  free(pathValBuf);
 }
-
+  
 void Http2Connection::write(const uint8_t *data, size_t length)
 {
   uint8_t *to_send = (uint8_t*)malloc(length);
@@ -347,10 +373,15 @@ void Http2Connection::nghttp2_stream_closed(int32_t stream_id)
   state_ = kConnectionStateTerminationPending;
 }
 
+bool Http2Connection::use_ssl() const
+{
+    return stream_info() ? stream_info()->scheme()=="https" : false;
+}
+
 void Http2Connection::end()
 {
   boost::system::error_code ec;
-  socket_->shutdown(ec);
+  socket()->shutdown(ec);
   
   if (ec)
   {
@@ -389,8 +420,8 @@ void Http2Connection::handle_connect(const boost::system::error_code& error)
   {
     state_ = kConnectionStateConnected;
 
-    std::string local_address = boost::lexical_cast<std::string>(socket_->next_layer().local_endpoint());
-    std::string remote_address = boost::lexical_cast<std::string>(socket_->next_layer().remote_endpoint());
+    std::string local_address = boost::lexical_cast<std::string>(socket()->next_layer().local_endpoint());
+    std::string remote_address = boost::lexical_cast<std::string>(socket()->next_layer().remote_endpoint());
 
 #if WINAPI_FAMILY_APP
     OutputDebugStringA("\nLocal address: ");
@@ -403,10 +434,17 @@ void Http2Connection::handle_connect(const boost::system::error_code& error)
     std::cerr << "Remote address: " << remote_address << std::endl;
 #endif
 
-    socket_->async_handshake(boost::asio::ssl::stream_base::client,
+    initialize_nghttp2_session();
+    
+    if (use_ssl()) {
+      socket()->async_handshake(boost::asio::ssl::stream_base::client,
                              boost::bind(&Http2Connection::handle_handshake, this,
                                          boost::asio::placeholders::error));
-    initialize_nghttp2_session();
+    } else {
+      boost::system::error_code ec;
+      strand_.post(boost::bind(&Http2Connection::handle_handshake, this,
+                              ec));
+    }
   }
   else
   {
@@ -418,13 +456,19 @@ void Http2Connection::handle_handshake(const boost::system::error_code& error)
 {
   if (!error)
   {
-//    boost::asio::ip::tcp::no_delay option(true);
-//    socket_->next_layer().set_option(option);
+    std::cerr << "handle_handshake" << std::endl;
+    boost::asio::ip::tcp::no_delay option(true);
+    socket()->next_layer().set_option(option);
     
     write((const uint8_t *)NGHTTP2_CLIENT_CONNECTION_PREFACE, NGHTTP2_CLIENT_CONNECTION_PREFACE_LEN);
     
-    nghttp2_settings_entry iv[1] = {
-      {NGHTTP2_SETTINGS_MAX_CONCURRENT_STREAMS, 100}};
+    
+    nghttp2_settings_entry iv[2] = {
+      { NGHTTP2_SETTINGS_MAX_CONCURRENT_STREAMS, 100},
+      { NGHTTP2_SETTINGS_ENABLE_PUSH, (uint32_t) client_->enable_push()}
+    };
+    
+    
     nghttp2_submit_settings(session_, NGHTTP2_FLAG_NONE, iv,
                             ARRLEN(iv));
     
@@ -450,14 +494,26 @@ void Http2Connection::queue_write(uint8_t *to_send, size_t length)
 
 void Http2Connection::perform_write()
 {
-  boost::asio::async_write(*(socket_.get()),
-                           boost::asio::buffer(&outbox_[0], outbox_.size()),
-                           strand_.wrap(boost::bind(
-                                                    &Http2Connection::handle_write,
-                                                    this,
-                                                    boost::asio::placeholders::error,
-                                                    boost::asio::placeholders::bytes_transferred
-                                                    )));
+  if (use_ssl()) {
+    boost::asio::async_write(*(socket().get()),
+                             boost::asio::buffer(&outbox_[0], outbox_.size()),
+                             strand_.wrap(boost::bind(
+                                                      &Http2Connection::handle_write,
+                                                      this,
+                                                      boost::asio::placeholders::error,
+                                                      boost::asio::placeholders::bytes_transferred
+                                                      )));
+  }
+  else {
+    boost::asio::async_write((socket()->next_layer()),
+                             boost::asio::buffer(&outbox_[0], outbox_.size()),
+                             strand_.wrap(boost::bind(
+                                                      &Http2Connection::handle_write,
+                                                      this,
+                                                      boost::asio::placeholders::error,
+                                                      boost::asio::placeholders::bytes_transferred
+                                                      )));
+  }
 }
 
 void Http2Connection::perform_read()
@@ -466,13 +522,25 @@ void Http2Connection::perform_read()
     return;
   }
   
-  socket()->async_read_some(boost::asio::buffer(&inbox_[0], inbox_.size()),
-                            boost::bind(&Http2Connection::handle_read, this,
-                                        boost::asio::placeholders::error,
-                                        boost::asio::placeholders::bytes_transferred));
+  if (use_ssl()) {
+    socket()->async_read_some(boost::asio::buffer(&inbox_[0], inbox_.size()),
+                              boost::bind(&Http2Connection::handle_read, this,
+                                          boost::asio::placeholders::error,
+                                          boost::asio::placeholders::bytes_transferred));
+    
+  }
+  else {
+    socket()->next_layer().async_read_some(boost::asio::buffer(&inbox_[0], inbox_.size()),
+                              boost::bind(&Http2Connection::handle_read, this,
+                                          boost::asio::placeholders::error,
+                                          boost::asio::placeholders::bytes_transferred));
+  }
 
-  read_timer_.expires_from_now(boost::posix_time::seconds(5));
-  read_timer_.async_wait(boost::bind(&Http2Connection::handle_read_timeout, this, boost::asio::placeholders::error));
+  if (connection_timeout_) {
+    read_timer_.expires_from_now(boost::posix_time::seconds(connection_timeout_));
+    read_timer_.async_wait(boost::bind(&Http2Connection::handle_read_timeout, this, boost::asio::placeholders::error));
+  }
+  
 }
 
 void Http2Connection::handle_write(const boost::system::error_code& error,
@@ -501,7 +569,9 @@ void Http2Connection::handle_write(const boost::system::error_code& error,
 void Http2Connection::handle_read(const boost::system::error_code& error,
                  size_t bytes_transferred)
 {
-  read_timer_.cancel();
+  if (connection_timeout_) {
+    read_timer_.cancel();
+  }
 
   if (!error && bytes_transferred)
   {
@@ -591,7 +661,8 @@ static std::shared_ptr<boost::asio::ssl::context> create_ssl_ctx(void)
                       SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION);
   
   SSL_CTX_set_next_proto_select_cb(ctx, select_next_proto_cb, NULL);
- // SSL_CTX_set_cipher_list(ctx, nghttp2::ssl::DEFAULT_CIPHER_LIST);
+  SSL_CTX_set_cipher_list(ctx, nghttp2::ssl::DEFAULT_CIPHER_LIST);
+
   return ssl_ctx;
 }
 
@@ -601,20 +672,43 @@ void runWithUri(const char *uri)
   std::shared_ptr<boost::asio::ssl::context> ssl_ctx = create_ssl_ctx();
   
   
-  std::shared_ptr<Http2Client> client = std::make_shared<Http2Client>(io_service, ssl_ctx);
+  std::shared_ptr<Http2Client> client = std::make_shared<Http2Client>(io_service, ssl_ctx, true);
   
   client->connect(uri);
   io_service->run();
 }
 
 #ifndef WINAPI_FAMILY_APP
+
+void runWithParams(std::string uri, std::string request, uint32_t timeout, bool enable_push)
+{
+  std::shared_ptr<boost::asio::io_service> io_service = std::make_shared<boost::asio::io_service>();
+  std::shared_ptr<boost::asio::ssl::context> ssl_ctx = create_ssl_ctx();
+  
+  std::shared_ptr<Http2Client> client = std::make_shared<Http2Client>(io_service, ssl_ctx, enable_push);
+  
+  client->connect(uri);
+  
+  if (request != "") {
+    client->set_request_string(request);
+  }
+  
+  client->set_connection_timeout(timeout);
+  
+  io_service->run();
+}
+
 int main(int argc, char *argv[])
 {
   try {
     struct sigaction act;
     
     if (argc < 2) {
-      std::cerr << "Usage: asio-client HTTPS_URI" << std::endl;
+      std::cerr << "Usage: asio-client -u HTTPS_URI/HTTP_URI " << std::endl;
+      std::cerr << "-r REQUEST_NAME - send specific request" << std::endl;
+      std::cerr << "-t CONNECTION_TIMEOUT_IN_SECONDS - connection stays open for this duration, default is timer set to infinite" << std::endl;
+      std::cerr << "-p 0/1 - disable/enable server push, default is enable" << std::endl;
+      
       exit(EXIT_FAILURE);
     }
     
@@ -622,8 +716,52 @@ int main(int argc, char *argv[])
     act.sa_handler = SIG_IGN;
     sigaction(SIGPIPE, &act, NULL);
     
-    run(argv[1]);
+    std::string uri;
+    std::string request;
+    uint32_t timeout = 0;
+    bool enable_push = true;
     
+    int c;
+    while ((c = getopt(argc, argv, "u:r:t:p:")) != -1)
+      switch (c)
+    {
+      case 'u':
+        if (optarg) {
+          uri = std::string(optarg);
+        }
+        break;
+      case 't':
+        timeout = atoi(optarg);
+        break;
+      case 'p':
+        enable_push = atoi(optarg);
+        break;
+      case 'r':
+        if (optarg) {
+          request = std::string(optarg);
+        }
+        break;
+
+      case '?':
+        if (optopt == 'u' || optopt == 't' || optopt == 'p' || optopt == 'r' || optopt == 'f')
+          std::cerr << "Option " << (char) optopt << " requires an argument." << std::endl;
+        else
+          std::cerr << "Option " << (char) optopt << " is unknown." << std::endl;
+        return EXIT_FAILURE;
+      default:
+        break;
+    }
+    
+    std::cerr << "URI: " << uri << " Request: " << request
+    << " Timeout: " << timeout << " Enable push: " << enable_push << std::endl;
+    
+    if (request != "" || timeout!=0 || !enable_push) { 
+      runWithParams(uri, request, timeout, enable_push);
+    }
+    else {
+      runWithUri(uri.c_str());
+    }
+      
   } catch (std::exception &e) {
     std::cerr << "exception: " << e.what() << "\n";
   }

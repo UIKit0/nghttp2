@@ -53,27 +53,36 @@ class Http2Client : public std::enable_shared_from_this<Http2Client>
 {
 public:
   Http2Client(std::shared_ptr<boost::asio::io_service> io_service,
-              std::shared_ptr<boost::asio::ssl::context> context)
-  : io_service_(io_service), ssl_ctx_(context)
-  {}
+              std::shared_ptr<boost::asio::ssl::context> context, bool enable_push)
+  : io_service_(io_service), ssl_ctx_(context), enable_push_(enable_push)
+  {
+  }
   
   std::shared_ptr<boost::asio::io_service> io_service() { return io_service_; }
   std::shared_ptr<boost::asio::ssl::context> ssl_ctx() const { return ssl_ctx_; }
   
+  bool enable_push() const { return enable_push_; }
+  
   void connect(std::string uri);
   void on_connect();
+  
+  void set_request_string(std::string request_string) { request_string_ = request_string; }
+  void set_connection_timeout(uint32_t connection_timeout);
+  
   
 private:
   std::shared_ptr<Http2Connection> connection_;
   std::shared_ptr<boost::asio::io_service> io_service_;
   std::shared_ptr<boost::asio::ssl::context> ssl_ctx_;
+  std::string request_string_;
+  bool enable_push_;
 };
 
   
-class Http2Stream {
+class Http2StreamInfo {
   
 public:
-  Http2Stream(const char *uri);
+  Http2StreamInfo(const char *uri);
   std::string uri() const { return uri_; }
   std::string host() const { return host_; }
   std::string port() const { return port_; }
@@ -110,13 +119,15 @@ public:
   Http2Connection(std::shared_ptr<Http2Client> client, std::string uri);
   ~Http2Connection();
   
-  void send_request(std::string method_name);
+  void send_request_with_method(std::string method_name);
   void write(const uint8_t *data, size_t length);
   
+  void set_connection_timeout(uint32_t connection_timeout) { connection_timeout_ = connection_timeout; }
   
-  std::shared_ptr<Http2Stream> stream() const { return stream_; }
+  std::shared_ptr<Http2StreamInfo> stream_info() const { return stream_info_; }
   nghttp2_session *session() { return session_; }
   void nghttp2_stream_closed(int32_t stream_id);
+  bool use_ssl() const;
   
 private:
   void end();
@@ -146,12 +157,13 @@ private:
   boost::asio::io_service::strand strand_;
   
   std::shared_ptr<boost::asio::ssl::stream<boost::asio::ip::tcp::socket> > socket_;
-  std::shared_ptr<Http2Stream> stream_;
+  std::shared_ptr<Http2StreamInfo> stream_info_;
   boost::asio::deadline_timer read_timer_;
   
   std::vector<uint8_t> outbox_;
   std::vector<uint8_t> inbox_;
   nghttp2_session *session_;
+  uint32_t connection_timeout_;
   
   ConnectionState state_;
 };
