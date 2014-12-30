@@ -38,8 +38,9 @@
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
-#ifdef WINAPI_FAMILY_APP
-#include <pch.h>
+#ifdef WINAPI_FAMILY
+#include <collection.h>
+#include <ppltasks.h>
 #define BOOST_ASIO_WINDOWS_RUNTIME 1
 #else 
 #include <unistd.h>
@@ -201,18 +202,15 @@ void Http2Client::connect(std::string uri)
 void Http2Client::on_connect()
 {
   if (request_string_.empty()) {
-    std::cerr << "no request string\n";
     connection_->send_request_with_method("GET");
   }
   else {
-    std::cerr << "request name "<< request_string_ << " \n";
     connection_->send_request_with_method(request_string_);
   }
 }
   
 void Http2Client::set_connection_timeout(uint32_t connection_timeout)
 {
-  std::cerr << "Setting Connection Timeout " << connection_timeout << std::endl;
   connection_->set_connection_timeout(connection_timeout);
 }
 
@@ -456,10 +454,9 @@ void Http2Connection::handle_handshake(const boost::system::error_code& error)
 {
   if (!error)
   {
-    std::cerr << "handle_handshake" << std::endl;
-    boost::asio::ip::tcp::no_delay option(true);
-    socket()->next_layer().set_option(option);
-    
+    //boost::asio::ip::tcp::no_delay option(true);
+    //socket()->next_layer().set_option(option);
+
     write((const uint8_t *)NGHTTP2_CLIENT_CONNECTION_PREFACE, NGHTTP2_CLIENT_CONNECTION_PREFACE_LEN);
     
     
@@ -661,7 +658,6 @@ static std::shared_ptr<boost::asio::ssl::context> create_ssl_ctx(void)
                       SSL_OP_NO_SESSION_RESUMPTION_ON_RENEGOTIATION);
   
   SSL_CTX_set_next_proto_select_cb(ctx, select_next_proto_cb, NULL);
-  SSL_CTX_set_cipher_list(ctx, nghttp2::ssl::DEFAULT_CIPHER_LIST);
 
   return ssl_ctx;
 }
