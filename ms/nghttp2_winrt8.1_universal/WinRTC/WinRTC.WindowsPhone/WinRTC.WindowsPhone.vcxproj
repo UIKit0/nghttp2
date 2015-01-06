@@ -61,15 +61,19 @@
   <Import Project="..\WinRTC.Shared\WinRTC.Shared.vcxitems" Label="Shared" />
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\build_dependencies.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\build_dependencies.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\build_dependencies.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\build_dependencies.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
   </PropertyGroup>
@@ -87,58 +91,66 @@
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);C:\Users\vivek\Documents\GitHub\openssl\inc32;C:\boost;$(SolutionDir)\..\..\examples;$(SolutionDir)\..\..\lib\includes;$(SolutionDir)\..\..\third-party</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);$(BOOST_HOME);$(OPENSSL_HOME)\include;$(SolutionDir)\..\..\examples;$(SolutionDir)\..\..\lib\includes;$(SolutionDir)\..\..\third-party</AdditionalIncludeDirectories>
       <AdditionalUsingDirectories>
       </AdditionalUsingDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
-      <AdditionalDependencies>WindowsPhoneCore.lib;RuntimeObject.lib;PhoneAppModelHost.lib;%(AdditionalDependencies);openssl.lib;libeay32.lib;ssleay32.lib;ws2_32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\boost\bin.v2\libs\system\build\msvc-12.0\debug\link-static\threading-multi\windows-api-phone;C:\Users\vivek\Documents\GitHub\openssl\vsout\NT-Phone-8.1-Static-Unicode\Debug\Win32\bin</AdditionalLibraryDirectories>
+      <AdditionalDependencies>WindowsPhoneCore.lib;RuntimeObject.lib;PhoneAppModelHost.lib;%(AdditionalDependencies);libeay32.lib;ssleay32.lib;ws2_32.lib;libboost_thread-vc120-mt-gd-1_58.lib;libboost_system-vc120-mt-gd-1_58.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(OPENSSL_HOME)\lib\Phone\8.1\Static\Unicode\$(Configuration)\$(Platform);$(BOOST_HOME)\bin.v2\libs\system\build\msvc-12.0\$(Configuration)\architecture-$(PlatformShortName)\link-static\threading-multi\windows-api-phone;$(BOOST_HOME)\bin.v2\libs\thread\build\msvc-12.0\$(Configuration)\architecture-$(PlatformShortName)\link-static\threading-multi\windows-api-phone</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PreprocessorDefinitions>_WINRT_DLL;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>_WINRT_DLL;NDEBUG;BOOST_ASIO_WINDOWS_RUNTIME=1;BOOST_REGEX_NO_LIB=1;BOOST_DATE_TIME_NO_LIB=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);$(BOOST_HOME);$(OPENSSL_HOME)\include;$(SolutionDir)\..\..\examples;$(SolutionDir)\..\..\lib\includes;$(SolutionDir)\..\..\third-party</AdditionalIncludeDirectories>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>WindowsPhoneCore.lib;RuntimeObject.lib;PhoneAppModelHost.lib;;%(AdditionalDependencies);libeay32.lib;ssleay32.lib;ws2_32.lib;libboost_thread-vc120-mt-1_58.lib;libboost_system-vc120-mt-1_58.lib</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <AdditionalLibraryDirectories>$(OPENSSL_HOME)\lib\Phone\8.1\Static\Unicode\$(Configuration)\$(Platform);$(BOOST_HOME)\bin.v2\libs\system\build\msvc-12.0\$(Configuration)\architecture-$(PlatformShortName)\link-static\threading-multi\windows-api-phone;$(BOOST_HOME)\bin.v2\libs\thread\build\msvc-12.0\$(Configuration)\architecture-$(PlatformShortName)\link-static\threading-multi\windows-api-phone</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PreprocessorDefinitions>_WINRT_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>_WINRT_DLL;BOOST_ASIO_WINDOWS_RUNTIME=1;BOOST_REGEX_NO_LIB=1;BOOST_DATE_TIME_NO_LIB=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);C:\Users\vivek\Documents\GitHub\openssl\inc32;$(SolutionDir)\..\..\examples;$(SolutionDir)\..\..\lib\includes;$(SolutionDir)\..\..\third-party</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);$(BOOST_HOME);$(OPENSSL_HOME)\include;$(SolutionDir)\..\..\examples;$(SolutionDir)\..\..\lib\includes;$(SolutionDir)\..\..\third-party</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>WindowsPhoneCore.lib;RuntimeObject.lib;PhoneAppModelHost.lib;;%(AdditionalDependencies);libeay32.lib;ssleay32.lib;ws2_32.lib;libboost_thread-vc120-mt-gd-1_58.lib;libboost_system-vc120-mt-gd-1_58.lib</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <AdditionalLibraryDirectories>$(OPENSSL_HOME)\lib\Phone\8.1\Static\Unicode\$(Configuration)\$(Platform);$(BOOST_HOME)\bin.v2\libs\system\build\msvc-12.0\$(Configuration)\architecture-$(PlatformShortName)\link-static\threading-multi\windows-api-phone;$(BOOST_HOME)\bin.v2\libs\thread\build\msvc-12.0\$(Configuration)\architecture-$(PlatformShortName)\link-static\threading-multi\windows-api-phone</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <PreprocessorDefinitions>_WINRT_DLL;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PreprocessorDefinitions>_WINRT_DLL;NDEBUG;BOOST_ASIO_WINDOWS_RUNTIME=1;BOOST_REGEX_NO_LIB=1;BOOST_DATE_TIME_NO_LIB=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>$(IntDir)pch.pch</PrecompiledHeaderOutputFile>
       <AdditionalOptions>/bigobj %(AdditionalOptions)</AdditionalOptions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory);$(BOOST_HOME);$(OPENSSL_HOME)\include;$(SolutionDir)\..\..\examples;$(SolutionDir)\..\..\lib\includes;$(SolutionDir)\..\..\third-party</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalDependencies>WindowsPhoneCore.lib;RuntimeObject.lib;PhoneAppModelHost.lib;;%(AdditionalDependencies);libeay32.lib;ssleay32.lib;ws2_32.lib;libboost_thread-vc120-mt-1_58.lib;libboost_system-vc120-mt-1_58.lib</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <AdditionalLibraryDirectories>$(OPENSSL_HOME)\lib\Phone\8.1\Static\Unicode\$(Configuration)\$(Platform);$(BOOST_HOME)\bin.v2\libs\system\build\msvc-12.0\$(Configuration)\architecture-$(PlatformShortName)\link-static\threading-multi\windows-api-phone;$(BOOST_HOME)\bin.v2\libs\thread\build\msvc-12.0\$(Configuration)\architecture-$(PlatformShortName)\link-static\threading-multi\windows-api-phone</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
